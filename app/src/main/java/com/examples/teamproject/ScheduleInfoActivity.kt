@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter
 
 class ScheduleInfoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityScheduleInfoBinding.inflate(layoutInflater) }
+    private var DBHelper:ScheduleDBHelper? = null
+
     private lateinit var schedule: Schedule
     private val activityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -92,13 +94,14 @@ class ScheduleInfoActivity : AppCompatActivity() {
             }
 
             buttonDelete.setOnClickListener {
-                val dbData = llooaadd()
+                val dbData = DBHelper!!.load()
                 for (sch in dbData) {
                     if (sch.isEqual(schedule)) {
                         dbData.remove(sch)
                         break
                     }
                 }
+                DBHelper!!.save(dbData)
                 finish()
             }
         }
@@ -106,5 +109,17 @@ class ScheduleInfoActivity : AppCompatActivity() {
 
     private fun makeTimeString(t: LocalDateTime): String {
         return t.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+    }
+
+    override fun onResume() {
+        if (DBHelper == null)
+            DBHelper = ScheduleDBHelper(this)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        DBHelper?.close()
+        DBHelper = null
+        super.onPause()
     }
 }

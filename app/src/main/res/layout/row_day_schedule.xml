@@ -9,7 +9,9 @@
         android:id="@+id/textview_row_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:padding="5dp"
+        android:maxLines="1"
         android:text="제목 1"
         android:textSize="20sp" />
 

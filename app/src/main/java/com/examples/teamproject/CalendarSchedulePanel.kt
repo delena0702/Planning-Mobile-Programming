@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.text.TextUtils
 import android.util.AttributeSet
 import java.time.LocalDate
 import java.time.YearMonth
@@ -52,9 +53,16 @@ class CalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
 
                     if ((drawData!![pos][row] != drawData!![pos - 1][row]) || (pos % 7 == 1)) {
                         paint.color = Color.parseColor("#000000")
+                        var title = drawData!![pos][row]!!.title
+
+                        if (paint.measureText(title) >= w / 7) {
+                            title = "${drawData!![pos][row]!!.title}..."
+                            while (paint.measureText(title) >= w / 7)
+                                title = "${title.substring(0, title.length - 4)}..."
+                        }
 
                         canvas.drawText(
-                            drawData!![pos][row]!!.title,
+                            title,
                             ((pos - 1) % 7).toFloat() * w / 7,
                             (((pos - 1) / 7).toFloat() + 0.55F + row * 0.2F - 0.02F) * h / weekCount,
                             paint
@@ -67,7 +75,7 @@ class CalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
     }
 
     fun refreshData() {
-        val data = llooaadd()
+        val data = (context as MainActivity).DBHelper!!.load()
         data.sortWith { a, b -> a.startTime.compareTo(b.startTime) }
 
         drawData = ArrayList(weekCount * 7 + 1)

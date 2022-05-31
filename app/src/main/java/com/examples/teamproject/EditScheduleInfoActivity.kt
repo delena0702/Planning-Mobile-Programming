@@ -5,15 +5,19 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.examples.teamproject.databinding.ActivityEditScheduleInfoBinding
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class EditScheduleInfoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEditScheduleInfoBinding.inflate(layoutInflater) }
+    private var DBHelper:ScheduleDBHelper? = null
+
     private var originalSchedule: Schedule? = null
     private var startTime = LocalDateTime.now()
     private var endTime = LocalDateTime.now()
@@ -24,8 +28,15 @@ class EditScheduleInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        if (intent.extras != null)
+        DBHelper = ScheduleDBHelper(this)
+
+        if (intent.extras!!.containsKey("schedule"))
             originalSchedule = intent.getSerializableExtra("schedule") as Schedule
+        if (intent.extras!!.containsKey("time")) {
+            val time = LocalDate.parse(intent.getStringExtra("time"))
+            startTime = time.atTime(0, 0)
+            endTime = time.atTime(23, 59)
+        }
 
         initLayout()
     }
@@ -160,10 +171,11 @@ class EditScheduleInfoActivity : AppCompatActivity() {
 
             buttonEditSubmit.setOnClickListener {
                 if (originalSchedule == null) {
-                    val arr = llooaadd()
+                    val arr = DBHelper!!.load()
                     arr.add(makeSchedule())
+                    DBHelper!!.save(arr)
                 } else {
-                    val arr = llooaadd()
+                    val arr = DBHelper!!.load()
                     val sch = makeSchedule()
                     for (i in 0 until arr.size) {
                         if (arr[i].isEqual(originalSchedule!!)) {
@@ -171,8 +183,7 @@ class EditScheduleInfoActivity : AppCompatActivity() {
                             break
                         }
                     }
-
-                    ssaavvee(arr)
+                    DBHelper!!.save(arr)
                     val intent = Intent()
                     intent.putExtra("schedule", sch)
                     setResult(RESULT_OK, intent)
@@ -262,5 +273,17 @@ class EditScheduleInfoActivity : AppCompatActivity() {
             }
         }
         return schedule
+    }
+
+    override fun onResume() {
+        if (DBHelper == null)
+            DBHelper = ScheduleDBHelper(this)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        DBHelper?.close()
+        DBHelper = null
+        super.onPause()
     }
 }
