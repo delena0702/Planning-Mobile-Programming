@@ -12,10 +12,12 @@ import java.time.format.DateTimeFormatter
 
 class ScheduleInfoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityScheduleInfoBinding.inflate(layoutInflater) }
+    private var DBHelper:ScheduleDBHelper? = null
+
     private lateinit var schedule: Schedule
     private val activityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.data!!.extras == null) return@registerForActivityResult
+            if (it.data == null) return@registerForActivityResult
             val sch = it.data!!.getSerializableExtra("schedule") as Schedule
             schedule = sch
             initLayout()
@@ -26,6 +28,11 @@ class ScheduleInfoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         schedule = intent.getSerializableExtra("schedule") as Schedule
+
+        if (intent.getBooleanExtra("isCompare",false)) {
+            binding.buttonDelete.visibility = View.GONE
+            binding.buttonEdit.visibility = View.GONE
+        }
         initLayout()
     }
 
@@ -37,6 +44,22 @@ class ScheduleInfoActivity : AppCompatActivity() {
                 "${makeTimeString(schedule.startTime)} ${makeTimeString(schedule.endTime)}"
             textviewPlace.text = schedule.place
             textviewOpen.text = if (schedule.open) "공개" else "비공개"
+
+            imageviewColor.setColorFilter(
+                resources.getColor(
+                    when (schedule.color) {
+                        1 -> R.color.schedule_color1
+                        2 -> R.color.schedule_color2
+                        3 -> R.color.schedule_color3
+                        4 -> R.color.schedule_color4
+                        5 -> R.color.schedule_color5
+                        else -> R.color.schedule_color1
+                    }, null
+                )
+            )
+
+            rowHistory1.visibility = View.VISIBLE
+            rowHistory2.visibility = View.VISIBLE
 
             if (schedule.isHistory) {
                 when (schedule.histGrade) {
@@ -76,13 +99,14 @@ class ScheduleInfoActivity : AppCompatActivity() {
             }
 
             buttonDelete.setOnClickListener {
-                val dbData = llooaadd()
+                val dbData = DBHelper!!.load()
                 for (sch in dbData) {
                     if (sch.isEqual(schedule)) {
                         dbData.remove(sch)
                         break
                     }
                 }
+                DBHelper!!.save(dbData)
                 finish()
             }
         }
@@ -90,5 +114,17 @@ class ScheduleInfoActivity : AppCompatActivity() {
 
     private fun makeTimeString(t: LocalDateTime): String {
         return t.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+    }
+
+    override fun onResume() {
+        if (DBHelper == null)
+            DBHelper = ScheduleDBHelper(this)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        DBHelper?.close()
+        DBHelper = null
+        super.onPause()
     }
 }

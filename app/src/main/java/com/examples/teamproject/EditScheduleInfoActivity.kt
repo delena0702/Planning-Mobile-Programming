@@ -5,24 +5,38 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.examples.teamproject.databinding.ActivityEditScheduleInfoBinding
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class EditScheduleInfoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEditScheduleInfoBinding.inflate(layoutInflater) }
+    private var DBHelper:ScheduleDBHelper? = null
+
     private var originalSchedule: Schedule? = null
     private var startTime = LocalDateTime.now()
     private var endTime = LocalDateTime.now()
-    private var grade = ""
+    private var grade = "중"
+    private var color = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        if (intent.extras != null)
+        DBHelper = ScheduleDBHelper(this)
+
+        if (intent.extras!!.containsKey("schedule"))
             originalSchedule = intent.getSerializableExtra("schedule") as Schedule
+        if (intent.extras!!.containsKey("time")) {
+            val time = LocalDate.parse(intent.getStringExtra("time"))
+            startTime = time.atTime(0, 0)
+            endTime = time.atTime(23, 59)
+        }
 
         initLayout()
     }
@@ -37,10 +51,10 @@ class EditScheduleInfoActivity : AppCompatActivity() {
             startTime = originalSchedule!!.startTime
             endTime = originalSchedule!!.endTime
             grade = originalSchedule!!.histGrade
-            if (originalSchedule!!.open)
-                binding.switchOpen.isChecked = true
-            else
-                binding.switchOpen.isChecked = true
+            color = originalSchedule!!.color
+
+            binding.switchOpen.isChecked = originalSchedule!!.open
+            binding.switchHistory.isChecked = originalSchedule!!.isHistory
         }
         refreshViews()
 
@@ -50,7 +64,7 @@ class EditScheduleInfoActivity : AppCompatActivity() {
                 DatePickerDialog(
                     this@EditScheduleInfoActivity,
                     { _, y, m, d ->
-                        startTime = startTime.withYear(y).withMonth(m+1).withDayOfMonth(d)
+                        startTime = startTime.withYear(y).withMonth(m + 1).withDayOfMonth(d)
 
                         if (startTime.isAfter(endTime))
                             endTime = startTime
@@ -82,7 +96,7 @@ class EditScheduleInfoActivity : AppCompatActivity() {
                 DatePickerDialog(
                     this@EditScheduleInfoActivity,
                     { _, y, m, d ->
-                        endTime = endTime.withYear(y).withMonth(m+1).withDayOfMonth(d)
+                        endTime = endTime.withYear(y).withMonth(m + 1).withDayOfMonth(d)
 
                         if (endTime.isBefore(startTime))
                             startTime = endTime
@@ -122,18 +136,46 @@ class EditScheduleInfoActivity : AppCompatActivity() {
                 refreshViews()
             }
 
+            imageviewColor1.setOnClickListener {
+                color = 1
+                refreshViews()
+            }
+
+            imageviewColor2.setOnClickListener {
+                color = 2
+                refreshViews()
+            }
+
+            imageviewColor3.setOnClickListener {
+                color = 3
+                refreshViews()
+            }
+
+            imageviewColor4.setOnClickListener {
+                color = 4
+                refreshViews()
+            }
+
+            imageviewColor5.setOnClickListener {
+                color = 5
+                refreshViews()
+            }
+
+            switchHistory.setOnCheckedChangeListener { _, _ ->
+                refreshViews()
+            }
+
             buttonEditCancel.setOnClickListener {
                 finish()
             }
 
             buttonEditSubmit.setOnClickListener {
                 if (originalSchedule == null) {
-                    val arr = llooaadd()
+                    val arr = DBHelper!!.load()
                     arr.add(makeSchedule())
-                }
-
-                else {
-                    val arr = llooaadd()
+                    DBHelper!!.save(arr)
+                } else {
+                    val arr = DBHelper!!.load()
                     val sch = makeSchedule()
                     for (i in 0 until arr.size) {
                         if (arr[i].isEqual(originalSchedule!!)) {
@@ -141,8 +183,7 @@ class EditScheduleInfoActivity : AppCompatActivity() {
                             break
                         }
                     }
-
-                    ssaavvee(arr)
+                    DBHelper!!.save(arr)
                     val intent = Intent()
                     intent.putExtra("schedule", sch)
                     setResult(RESULT_OK, intent)
@@ -159,14 +200,59 @@ class EditScheduleInfoActivity : AppCompatActivity() {
             textviewTime3.text = endTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
             textviewTime4.text = endTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 
-            imageviewGrade1.setColorFilter(ContextCompat.getColor(this@EditScheduleInfoActivity, R.color.disabled), android.graphics.PorterDuff.Mode.MULTIPLY)
-            imageviewGrade2.setColorFilter(ContextCompat.getColor(this@EditScheduleInfoActivity, R.color.disabled), android.graphics.PorterDuff.Mode.MULTIPLY)
-            imageviewGrade3.setColorFilter(ContextCompat.getColor(this@EditScheduleInfoActivity, R.color.disabled), android.graphics.PorterDuff.Mode.MULTIPLY)
+            imageviewGrade1.setColorFilter(
+                ContextCompat.getColor(
+                    this@EditScheduleInfoActivity,
+                    R.color.disabled
+                ), android.graphics.PorterDuff.Mode.MULTIPLY
+            )
+            imageviewGrade2.setColorFilter(
+                ContextCompat.getColor(
+                    this@EditScheduleInfoActivity,
+                    R.color.disabled
+                ), android.graphics.PorterDuff.Mode.MULTIPLY
+            )
+            imageviewGrade3.setColorFilter(
+                ContextCompat.getColor(
+                    this@EditScheduleInfoActivity,
+                    R.color.disabled
+                ), android.graphics.PorterDuff.Mode.MULTIPLY
+            )
 
-            when(grade) {
-                "상"-> imageviewGrade1.colorFilter = null
-                "중"-> imageviewGrade2.colorFilter = null
-                "하"-> imageviewGrade3.colorFilter = null
+            imageviewColor1.foreground = null
+            imageviewColor2.foreground = null
+            imageviewColor3.foreground = null
+            imageviewColor4.foreground = null
+            imageviewColor5.foreground = null
+
+            when (color) {
+                1 -> imageviewColor1.foreground =
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_24, null)
+                2 -> imageviewColor2.foreground =
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_24, null)
+                3 -> imageviewColor3.foreground =
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_24, null)
+                4 -> imageviewColor4.foreground =
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_24, null)
+                5 -> imageviewColor5.foreground =
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_24, null)
+            }
+
+            if (switchHistory.isChecked) {
+                rowHistory1.visibility = View.VISIBLE
+                rowHistory2.visibility = View.VISIBLE
+                scrollEdit.post {
+                    scrollEdit.fullScroll(View.FOCUS_DOWN)
+                }
+            } else {
+                rowHistory1.visibility = View.GONE
+                rowHistory2.visibility = View.GONE
+            }
+
+            when (grade) {
+                "상" -> imageviewGrade1.colorFilter = null
+                "중" -> imageviewGrade2.colorFilter = null
+                "하" -> imageviewGrade3.colorFilter = null
             }
         }
     }
@@ -176,16 +262,28 @@ class EditScheduleInfoActivity : AppCompatActivity() {
         val content = binding.edittextContent.text.toString()
         val place = binding.edittextPlace.text.toString()
         val open = binding.switchOpen.isChecked
+
         val schedule = Schedule(title, content, place, startTime, endTime, open).apply {
-            isHistory = true
-            histGrade = when {
-                binding.imageviewGrade1.colorFilter == null -> "상"
-                binding.imageviewGrade2.colorFilter == null -> "중"
-                binding.imageviewGrade3.colorFilter == null -> "하"
-                else -> ""
+            color = this@EditScheduleInfoActivity.color
+            isHistory = binding.switchHistory.isChecked
+
+            if (isHistory) {
+                histGrade = grade
+                histMemo = binding.edittextMemo.text.toString()
             }
-            histMemo = binding.edittextMemo.text.toString()
         }
         return schedule
+    }
+
+    override fun onResume() {
+        if (DBHelper == null)
+            DBHelper = ScheduleDBHelper(this)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        DBHelper?.close()
+        DBHelper = null
+        super.onPause()
     }
 }

@@ -5,22 +5,25 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import com.examples.teamproject.databinding.ViewPlanningCalendarBinding
+import com.examples.teamproject.databinding.ViewPlanningCompareCalendarBinding
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
-class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
+    LinearLayout(context, attrs) {
     var time = LocalDate.now()!!
     private lateinit var cursor: TextView
-    val binding by lazy { ViewPlanningCalendarBinding.bind(this) }
+    val binding by lazy { ViewPlanningCompareCalendarBinding.bind(this) }
     var dateSelectedListener: OnDateSelectedListener? = null
+    private var textViews = ArrayList<TextView>()
 
     interface OnDateSelectedListener {
         fun onDateSelected(date: LocalDate)
@@ -30,13 +33,9 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
         const val HEADER_HEIGHT = 100
     }
 
-    init {
-        initLayout()
-    }
-
-    private fun initLayout() {
+    fun initLayout() {
         val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.view_planning_calendar, this)
+        inflater.inflate(R.layout.view_planning_compare_calendar, this)
 
         binding.textviewCalendarTitle.setOnClickListener {
             DatePickerDialog(this.context, { _, y, m, d ->
@@ -60,6 +59,8 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
     fun createCalendar() {
         binding.textviewCalendarTitle.text = time.format(DateTimeFormatter.ofPattern("y년 M월"))
 
+        textViews.clear()
+
         binding.tableCalendar.removeAllViews()
         binding.tableCalendar.addView(createCalendarHeader())
 
@@ -82,6 +83,9 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
                     gravity = Gravity.TOP or Gravity.START
 
                     foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
+
+                    if (date in 1..lastDate)
+                        textViews.add(this)
 
                     text = if (date in 1..lastDate) date.toString() else ""
                     textSize = 16F
@@ -152,8 +156,22 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
     }
 
     private fun refreshSchedulePanel(weekCount: Int) {
-        binding.calendarSchedulePanel.weekCount = weekCount
-        binding.calendarSchedulePanel.ym = YearMonth.of(time.year, time.month)
-        binding.calendarSchedulePanel.refreshData()
+        binding.calendarCompareSchedulePanel.weekCount = weekCount
+        binding.calendarCompareSchedulePanel.ym = YearMonth.of(time.year, time.month)
+        binding.calendarCompareSchedulePanel.refreshData()
+    }
+
+    fun refreshColor(arr: Array<Boolean>) {
+        for (i in 1 until arr.size) {
+            if (arr[i])
+                textViews[i - 1].setBackgroundColor(
+                    resources.getColor(
+                        R.color.empty_schedule,
+                        null
+                    )
+                )
+            else
+                textViews[i - 1].background = null
+        }
     }
 }

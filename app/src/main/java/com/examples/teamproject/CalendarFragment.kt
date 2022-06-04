@@ -17,17 +17,21 @@ class CalendarFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding.planningCalendar.dateSelectedListener = object:PlanningCalendarView.OnDateSelectedListener {
-            override fun onDateSelected(date: LocalDate) {
-                val intent = Intent(this@CalendarFragment.context, DayScheduleInfoActivity::class.java)
-                val t = binding.planningCalendar.time
-                intent.putExtra("time",t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                startActivity(intent)
+        binding.planningCalendar.dateSelectedListener =
+            object : PlanningCalendarView.OnDateSelectedListener {
+                override fun onDateSelected(date: LocalDate) {
+                    val intent =
+                        Intent(this@CalendarFragment.context, DayScheduleInfoActivity::class.java)
+                    val t = binding.planningCalendar.time
+                    intent.putExtra("time", t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    startActivity(intent)
+                }
             }
-        }
 
         binding.floatingButtonAdd.setOnClickListener {
             val intent = Intent(this.context, EditScheduleInfoActivity::class.java)
+            val t = binding.planningCalendar.time
+            intent.putExtra("time", t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             startActivity(intent)
         }
 

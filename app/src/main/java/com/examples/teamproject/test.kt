@@ -11,10 +11,12 @@ fun llooaadd(): ArrayList<Schedule> {
                 "제목1",
                 "내용1",
                 "장소1",
-                LocalDateTime.of(2022, 6, 1, 9, 20),
-                LocalDateTime.of(2022, 6, 1, 11, 5),
+                LocalDateTime.of(2022, 5, 21, 9, 0),
+                LocalDateTime.of(2022, 5, 25, 11, 0),
                 false
-            )
+            ).apply {
+                color = 2
+            }
         )
 
         ddbb.add(
@@ -22,10 +24,12 @@ fun llooaadd(): ArrayList<Schedule> {
                 "제목2",
                 "내용2",
                 "장소2",
-                LocalDateTime.of(2022, 6, 2, 12, 0),
-                LocalDateTime.of(2022, 6, 2, 15, 30),
+                LocalDateTime.of(2022, 5, 22, 9, 0),
+                LocalDateTime.of(2022, 5, 22, 11, 0),
                 true
-            )
+            ).apply {
+                color = 3
+            }
         )
 
         ddbb.add(
@@ -33,10 +37,12 @@ fun llooaadd(): ArrayList<Schedule> {
                 "제목3",
                 "내용3",
                 "장소3",
-                LocalDateTime.of(2022, 5, 29, 9, 0),
-                LocalDateTime.of(2022, 5, 29, 11, 0),
+                LocalDateTime.of(2022, 4, 22, 9, 0),
+                LocalDateTime.of(2022, 5, 22, 11, 0),
                 true
-            )
+            ).apply {
+                color = 4
+            }
         )
 
         ddbb.add(
@@ -44,16 +50,15 @@ fun llooaadd(): ArrayList<Schedule> {
                 "제목4",
                 "내용4",
                 "장소4",
-                LocalDateTime.of(2022, 6, 1, 15, 30),
-                LocalDateTime.of(2022, 6, 1, 16, 10),
+                LocalDateTime.of(2022, 5, 25, 9, 0),
+                LocalDateTime.of(2022, 6, 12, 11, 0),
                 true
-            )
+            ).apply {
+                isHistory = true
+                histGrade = "상"
+                histMemo = "메모4"
+            }
         )
-
-
-        ddbb[3].isHistory = true
-        ddbb[3].histGrade = "상"
-        ddbb[3].histMemo = "메모4"
     }
 
     return ddbb
