@@ -28,6 +28,11 @@ class ScheduleInfoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         schedule = intent.getSerializableExtra("schedule") as Schedule
+
+        if (intent.getBooleanExtra("isCompare",false)) {
+            binding.buttonDelete.visibility = View.GONE
+            binding.buttonEdit.visibility = View.GONE
+        }
         initLayout()
     }
 

@@ -17,6 +17,7 @@ class DayScheduleInfoActivity : AppCompatActivity() {
     private var data: ArrayList<Schedule>? = null
     private lateinit var time: LocalDate
     private var DBHelper:ScheduleDBHelper? = null
+    private var isCompare = false
 
 
     inner class Adapter(val items: ArrayList<Schedule>) :
@@ -28,6 +29,7 @@ class DayScheduleInfoActivity : AppCompatActivity() {
                     val intent =
                         Intent(this@DayScheduleInfoActivity, ScheduleInfoActivity::class.java)
                     intent.putExtra("schedule", items[adapterPosition])
+                    intent.putExtra("isCompare", isCompare)
                     finish()
                     startActivity(intent)
                 }
@@ -66,7 +68,15 @@ class DayScheduleInfoActivity : AppCompatActivity() {
 
     private fun initLayout() {
         time = LocalDate.parse(intent.getStringExtra("time"))
-        refreshData()
+        if (intent.hasExtra("schedules")) {
+            isCompare = true
+            val scheduleString = intent.getStringExtra("schedules")!!
+            data = Schedule.parseJSON(scheduleString)
+        }
+        else {
+            isCompare = false
+            refreshData()
+        }
 
         binding.textviewDayScheduleTitle.text = time.format(DateTimeFormatter.ofPattern("MM월 dd일"))
 

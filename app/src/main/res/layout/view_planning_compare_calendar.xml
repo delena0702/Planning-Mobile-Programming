@@ -42,8 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.examples.teamproject.CalendarSchedulePanel
-            android:id="@+id/calendar_schedule_panel"
+        <com.examples.teamproject.CompareCalendarSchedulePanel
+            android:id="@+id/calendar_compare_schedule_panel"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
