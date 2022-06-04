@@ -130,7 +130,7 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
                 foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
                 text = ch.toString()
-                textSize = 20F
+                textSize = 0F
             }
 
             tableRow.addView(textView)
@@ -154,4 +154,5 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
         binding.calendarSchedulePanel.ym = YearMonth.of(time.year, time.month)
         binding.calendarSchedulePanel.refreshData()
     }
+
 }

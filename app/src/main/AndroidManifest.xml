@@ -11,8 +11,7 @@
         android:theme="@style/Theme.TeamProject">
         <activity
             android:name=".EditScheduleInfoActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:exported="false" />
         <activity
             android:name=".ScheduleInfoActivity"
             android:exported="false" />

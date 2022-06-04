@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
@@ -33,15 +34,7 @@ class CalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
         for (pos in 1..weekCount * 7) {
             for (row in 0 until dataCount) {
                 if (drawData!![pos][row] != null) {
-                    paint.color = when (drawData!![pos][row]!!.color) {
-                        1 -> resources.getColor(R.color.schedule_color1, null)
-                        2 -> resources.getColor(R.color.schedule_color2, null)
-                        3 -> resources.getColor(R.color.schedule_color3, null)
-                        4 -> resources.getColor(R.color.schedule_color4, null)
-                        5 -> resources.getColor(R.color.schedule_color5, null)
-                        else -> resources.getColor(R.color.schedule_color1, null)
-                    }
-
+                    paint.color = Color.parseColor("#ABCDEF")
                     canvas.drawRect(
                         ((pos - 1) % 7).toFloat() * w / 7,
                         (((pos - 1) / 7).toFloat() + 0.4F + row * 0.2F) * h / weekCount,
@@ -51,15 +44,15 @@ class CalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
                     )
 
                     if ((drawData!![pos][row] != drawData!![pos - 1][row]) || (pos % 7 == 1)) {
-                        paint.color = Color.parseColor("#000000")
+                            paint.color = Color.parseColor("#000000")
 
-                        canvas.drawText(
-                            drawData!![pos][row]!!.title,
-                            ((pos - 1) % 7).toFloat() * w / 7,
-                            (((pos - 1) / 7).toFloat() + 0.55F + row * 0.2F - 0.02F) * h / weekCount,
-                            paint
-                        )
-                    }
+                            canvas.drawText(
+                                drawData!![pos][row]!!.title,
+                                ((pos - 1) % 7).toFloat() * w / 7,
+                                (((pos - 1) / 7).toFloat() + 0.55F + row * 0.2F - 0.02F) * h / weekCount,
+                                paint
+                            )
+                        }
                 }
             }
         }

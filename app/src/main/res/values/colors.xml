@@ -12,10 +12,4 @@
     <color name="transparent">#00000000</color>
     <color name="textview">#FF656565</color>
     <color name="disabled">#FF656565</color>
-
-    <color name="schedule_color1">#FFEFABCD</color>
-    <color name="schedule_color2">#FFFEDCBA</color>
-    <color name="schedule_color3">#FFBAFEDC</color>
-    <color name="schedule_color4">#FFABCDEF</color>
-    <color name="schedule_color5">#FFDCBAFE</color>
 </resources>

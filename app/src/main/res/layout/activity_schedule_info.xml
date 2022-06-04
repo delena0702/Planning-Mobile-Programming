@@ -24,10 +24,10 @@
 
                 <TextView
                     android:id="@+id/textview_title"
+                    android:layout_span="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:layout_span="2"
                     android:layout_weight="1"
                     android:text="제목"
                     android:textSize="25sp" />
@@ -41,9 +41,9 @@
                 <TextView
                     android:id="@+id/textview_content"
                     android:layout_width="wrap_content"
+                    android:layout_span="2"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:layout_span="2"
                     android:layout_weight="1"
                     android:text="내용"
                     android:textSize="20sp" />
@@ -116,30 +116,6 @@
             </TableRow>
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="색상"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/imageview_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_margin="10dp"
-                    app:srcCompat="@drawable/ic_baseline_circle_24"
-                    app:tint="@color/schedule_color1" />
-            </TableRow>
-
-            <TableRow
                 android:id="@+id/row_history1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,11 +124,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:gravity="center"
-                    android:text="평가"
+                    android:textStyle="bold"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:text="평가"
+                    />
 
                 <ImageView
                     android:id="@+id/imageview_open"
