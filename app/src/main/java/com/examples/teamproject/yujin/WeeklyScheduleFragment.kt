@@ -19,7 +19,7 @@ class WeeklyScheduleFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // 임의로 planningWeekly View의 weeklyData 정보 세팅함
         //binding.planningWeekly.weeklyData = llooaadd()
@@ -49,15 +49,17 @@ class WeeklyScheduleFragment : Fragment() {
 
         binding.floatingButton2Add.setOnClickListener {
             val intent = Intent(this.context, EditScheduleInfoActivity::class.java)
+            val t = binding.planningWeekly.time
+            intent.putExtra("time", t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             startActivity(intent)
         }
 
         return binding.root
     }
 
-//    override fun onResume(){
-//        binding.planningWeekly.createWeekly()
-//        super.onResume()
-//    }
+    override fun onResume(){
+        binding.planningWeekly.refreshData()
+        super.onResume()
+    }
 
 }

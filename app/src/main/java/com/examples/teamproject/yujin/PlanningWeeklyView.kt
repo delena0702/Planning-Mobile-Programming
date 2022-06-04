@@ -13,10 +13,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.examples.teamproject.MainActivity
 import com.examples.teamproject.R
 import com.examples.teamproject.Schedule
 import com.examples.teamproject.databinding.ViewPlanningWeeklyBinding
-import com.examples.teamproject.llooaadd
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -31,7 +31,7 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
     private lateinit var cursor: TextView
     var dateSelectedListener: OnDateSelectedListener? = null
     private val dataCount = 49
-    var weeklyData = llooaadd()
+    var weeklyData = (context as MainActivity).DBHelper!!.load()
 
     interface OnDateSelectedListener {
         fun onDateSelected(date: LocalDate)
@@ -46,7 +46,6 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
     }
 
     private fun initLayout() {
-
         val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.view_planning_weekly, this)
 
@@ -61,12 +60,11 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
             createTimeTable()
         }
 
-        createWeekly()
-        createTimeTable()
+//        createWeekly()
+//        createTimeTable()
     }
 
     private fun createTimeTable() {
-
         //앱 실행 시 타임테이블 9시부터 보이게
         binding.tableScrollView.post { binding.tableScrollView.scrollTo(0, binding.nine.top) }
 
@@ -168,8 +166,8 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
         binding.tableWeekly.addView(tableRow)
 
         //refresh
-        binding.weeklySchedulePanel.ym = YearMonth.of(time.year, time.month)
-        binding.weeklySchedulePanel.refreshData()
+//        binding.weeklySchedulePanel.ym = YearMonth.of(time.year, time.month)
+        // binding.weeklySchedulePanel.refreshData()
         val maxCount = weeklyDataGroup.values.maxOf { it.size }
         repeat(maxCount) { row ->
             val tableRow = TableRow(context).apply {
@@ -187,7 +185,15 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                     if (weeklyDataGroup.containsKey(indexArray[i])) {
                         if (weeklyDataGroup[indexArray[i]]?.size!! > depthArray[i]){
                             text = weeklyDataGroup[indexArray[i]]?.get(depthArray[i])?.title
-                            setBackgroundResource(R.drawable.textview_background_radius)
+                            when (weeklyDataGroup[indexArray[i]]?.get(depthArray[i])?.color) {
+                                1 ->setBackgroundResource(R.drawable.textview_background_radius1)
+                                2 ->setBackgroundResource(R.drawable.textview_background_radius2)
+                                3 ->setBackgroundResource(R.drawable.textview_background_radius3)
+                                4 ->setBackgroundResource(R.drawable.textview_background_radius4)
+                                5 ->setBackgroundResource(R.drawable.textview_background_radius5)
+                                else ->setBackgroundResource(R.drawable.textview_background_radius1)
+                            }
+
                             depthArray[i]++
                         }
                     }
@@ -230,7 +236,6 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
     }
 
     private fun onClickDate(date: Int, textView: TextView) {
-        Log.d("WeeklySchedulePanel", "onClickDate: $date ${time.dayOfMonth} ${time.dayOfWeek}")
         if (date != time.dayOfMonth) {
             time = if (abs(time.dayOfMonth - date) < 7) {
                 //월에 안 걸치는 경우
@@ -253,6 +258,15 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
         } else {
             dateSelectedListener?.onDateSelected(time)
         }
+    }
+
+    fun refreshData() {
+        weeklyData = (context as MainActivity).DBHelper!!.load()
+        // binding.weeklySchedulePanel.refreshData()
+        createWeekly()
+        createTimeTable()
+
+        invalidate()
     }
 
 }

@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/drawable/textview_background_radius.xml" value="0.184" />
+        <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/drawable/textview_background_radius1.xml" value="0.184" />
+        <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/drawable/textview_background_radius2.xml" value="0.184" />
+        <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/drawable/textview_background_radius3.xml" value="0.184" />
+        <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/drawable/textview_background_radius4.xml" value="0.184" />
+        <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/drawable/textview_background_radius5.xml" value="0.184" />
+        <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/drawable/timetable_border.xml" value="0.184" />
         <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/layout/activity_edit_schedule_info.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/GIT/app/src/main/res/layout/view_planning_calendar.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/TeamProject/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1555" />

@@ -16,7 +16,7 @@ class DayScheduleInfoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityDayScheduleInfoBinding.inflate(layoutInflater) }
     private var data: ArrayList<Schedule>? = null
     private lateinit var time: LocalDate
-    private var DBHelper:ScheduleDBHelper? = null
+    private var DBHelper: ScheduleDBHelper? = null
     private var isCompare = false
 
 
@@ -72,8 +72,7 @@ class DayScheduleInfoActivity : AppCompatActivity() {
             isCompare = true
             val scheduleString = intent.getStringExtra("schedules")!!
             data = Schedule.parseJSON(scheduleString)
-        }
-        else {
+        } else {
             isCompare = false
             refreshData()
         }

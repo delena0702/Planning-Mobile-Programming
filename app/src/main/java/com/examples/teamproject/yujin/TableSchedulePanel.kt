@@ -6,10 +6,13 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
+import androidx.core.content.res.ResourcesCompat
+import com.examples.teamproject.MainActivity
+import com.examples.teamproject.R
 import com.examples.teamproject.Schedule
-import com.examples.teamproject.llooaadd
 import java.time.LocalDate
 
 class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
@@ -53,7 +56,14 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
                 val endHeight = 2 * endHour + end.minute.toFloat() / 30 + 1
 
 
-                paint.color = Color.parseColor("#ABCDEF")
+                paint.color = when (drawData!![i].color) {
+                    1 ->ResourcesCompat.getColor(resources, R.color.schedule_color1, null)
+                    2 ->ResourcesCompat.getColor(resources, R.color.schedule_color2, null)
+                    3 ->ResourcesCompat.getColor(resources, R.color.schedule_color3, null)
+                    4 ->ResourcesCompat.getColor(resources, R.color.schedule_color4, null)
+                    5 ->ResourcesCompat.getColor(resources, R.color.schedule_color5, null)
+                    else ->ResourcesCompat.getColor(resources, R.color.schedule_color1, null)
+                }
                 paint.style = Paint.Style.FILL
                 paint.textSize =  h / 2.5.toFloat()
 
@@ -62,7 +72,7 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
                     canvas!!.drawRect(
                         startDateValue * w,
                         startHeight * h - 2,
-                        (startDateValue + 1) * w,
+                        (startDateValue + 1) * w - 10,
                         endHeight * h - 2,
                         paint
                     )
@@ -78,7 +88,6 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
 
             }
         }
-
         super.onDraw(canvas)
     }
 
@@ -102,7 +111,7 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
     }
 
     fun refreshData(time: LocalDate) {
-        val data = llooaadd()
+        val data = (context as MainActivity).DBHelper!!.load()
         data.sortWith { a, b -> a.startTime.compareTo(b.startTime) }
 
         drawData = ArrayList(data.size)

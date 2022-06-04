@@ -47,12 +47,6 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp">
 
-        <com.examples.teamproject.yujin.WeeklySchedulePanel
-            android:id="@+id/weekly_schedule_panel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
         <TableLayout
             android:id="@+id/table_weekly"
             android:layout_width="match_parent"
