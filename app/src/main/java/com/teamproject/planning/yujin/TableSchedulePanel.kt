@@ -6,13 +6,17 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.teamproject.planning.MainActivity
 import com.teamproject.planning.R
 import com.teamproject.planning.Schedule
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 class TableSchedulePanel(context: Context, attrs: AttributeSet?) :
     androidx.appcompat.widget.AppCompatTextView(context, attrs) {
@@ -46,8 +50,8 @@ class TableSchedulePanel(context: Context, attrs: AttributeSet?) :
                 var end = drawData!![i].endTime //drawData에 저장된 i번째 일정 끝 정보
 
                 if (start < sunday.atStartOfDay()) start = sunday.atStartOfDay()
-                if (end > saturday.plusDays(1L).atStartOfDay()) end =
-                    saturday.plusDays(1L).atStartOfDay()
+                if (end > LocalDateTime.of(saturday, LocalTime.of(23, 59)))
+                    end = LocalDateTime.of(saturday, LocalTime.of(23, 59))
 
                 if (end.toLocalDate() < sunday || saturday < start.toLocalDate()) continue
 

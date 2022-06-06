@@ -20,6 +20,7 @@
 
         <TextView
             android:id="@+id/textview_day_schedule_title"
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5월 12일"

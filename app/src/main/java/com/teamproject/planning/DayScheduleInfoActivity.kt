@@ -19,7 +19,6 @@ class DayScheduleInfoActivity : AppCompatActivity() {
     private var DBHelper: ScheduleDBHelper? = null
     private var isCompare = false
 
-
     inner class Adapter(val items: ArrayList<Schedule>) :
         RecyclerView.Adapter<Adapter.ViewHolder>() {
         inner class ViewHolder(val binding: RowDayScheduleBinding) :

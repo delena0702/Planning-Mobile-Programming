@@ -1,5 +1,6 @@
 package com.teamproject.planning.yujin
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
@@ -55,6 +56,13 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
             createWeekly()
             createTimeTable()
         }
+        binding.textviewWeeklyTitle.setOnClickListener {
+            DatePickerDialog(this.context, { _, y, m, d ->
+                time = LocalDate.of(y, m + 1, d)
+                createWeekly()
+                createTimeTable()
+            }, time.year, time.monthValue - 1, time.dayOfMonth).show()
+        }
 
 //        createWeekly()
 //        createTimeTable()
@@ -78,7 +86,8 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 val textView = TextView(context).apply {
                     layoutParams = textViewLP
                     setPadding(10, 20, 10, 20)
-                    foreground = ResourcesCompat.getDrawable(resources, R.drawable.timetable_border, null)
+                    foreground =
+                        ResourcesCompat.getDrawable(resources, R.drawable.timetable_border, null)
                     gravity = Gravity.TOP or Gravity.START
                 }
                 tableRow.addView(textView)
@@ -134,7 +143,7 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
         val textViewLP = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
 
         // val result = ArrayList<Schedule>()
-        val weeklyDataGroup = HashMap<Int, ArrayList<Schedule>>()
+        val weeklyDataGroup = HashMap<String, ArrayList<Schedule>>()
 
         weeklyData.sortBy { it.startTime }
 
@@ -142,19 +151,19 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
             if (sch.endTime.toLocalDate() < sunday) continue
             if (sch.startTime.toLocalDate() > saturday) continue
 
-            var d = sch.startTime
-            while (d <= sch.endTime) {
-                if (!weeklyDataGroup.contains(d.dayOfMonth))
-                    weeklyDataGroup.put(d.dayOfMonth, ArrayList())
+            var d = sch.startTime.toLocalDate()
+            while (d <= sch.endTime.toLocalDate()) {
+                if (!weeklyDataGroup.contains(d.toString()))
+                    weeklyDataGroup[d.toString()] = ArrayList()
 
-                weeklyDataGroup.get(d.dayOfMonth)!!.add(sch)
+                weeklyDataGroup[d.toString()]!!.add(sch)
                 d = d.plusDays(1L)
             }
         }
 
         // val weeklyDataGroup = result.groupBy { it.startTime.dayOfMonth }
 
-        val indexArray = IntArray(7)
+        val indexArray = Array(7) { _ -> "" }
         val depthArray = IntArray(7)
 
         for (i in 0 until 7) {
@@ -166,7 +175,7 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
 
                 text = if (date in sunday..saturday) date.dayOfMonth.toString() else ""
 
-                indexArray[i] = date.dayOfMonth
+                indexArray[i] = date.toString()
                 if (i == 0) setTextColor(Color.RED)
                 else if (i == 6) setTextColor(Color.BLUE)
                 else setTextColor(Color.BLACK)

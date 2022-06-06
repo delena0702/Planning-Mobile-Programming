@@ -41,7 +41,7 @@ class ScheduleInfoActivity : AppCompatActivity() {
             textviewTitle.text = schedule.title
             textviewContent.text = schedule.content
             textviewTime.text =
-                "${makeTimeString(schedule.startTime)} ${makeTimeString(schedule.endTime)}"
+                "${makeTimeString(schedule.startTime)}\n${makeTimeString(schedule.endTime)}"
             textviewPlace.text = schedule.place
             textviewOpen.text = if (schedule.open) "공개" else "비공개"
 
