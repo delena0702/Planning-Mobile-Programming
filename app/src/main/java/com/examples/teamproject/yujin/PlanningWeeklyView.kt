@@ -1,32 +1,28 @@
 package com.examples.teamproject.yujin
 
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import com.examples.teamproject.MainActivity
 import com.examples.teamproject.R
 import com.examples.teamproject.Schedule
 import com.examples.teamproject.databinding.ViewPlanningWeeklyBinding
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 
 
 class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
-
-    var time = LocalDate.now()!!
+    var time = (context as MainActivity).time
+        set(value) {
+            (context as MainActivity).time = value
+            field = value
+        }
     val binding by lazy { ViewPlanningWeeklyBinding.bind(this) }
     private lateinit var cursor: TextView
     var dateSelectedListener: OnDateSelectedListener? = null
@@ -83,9 +79,6 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                     layoutParams = textViewLP
                     setPadding(10, 20, 10, 20)
                     gravity = Gravity.TOP or Gravity.START
-
-                    foreground =
-                        ResourcesCompat.getDrawable(resources, R.drawable.timetable_border, null)
                 }
                 tableRow.addView(textView)
             }
@@ -95,7 +88,22 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
     }
 
     fun createWeekly() {
-        binding.textviewWeeklyTitle.text = "${time.year}년 ${time.monthValue}월"
+//        년 월 출력방식 변경 (형식 : 월 영문표기 / 년)
+        val montharr = arrayOf<String>(
+            "JAN",
+            "FEB",
+            "MAR",
+            "APR",
+            "MAY",
+            "JUN",
+            "JUL",
+            "AUG",
+            "SEP",
+            "OCT",
+            "NOV",
+            "DEC"
+        )
+        binding.textviewWeeklyTitle.text = "${montharr[time.monthValue - 1]} / ${time.year} "
 
         binding.tableWeekly.removeAllViews()
         binding.tableWeekly.addView(createWeeklyHeader())
@@ -103,8 +111,8 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
         var sunday = time
         var saturday = time
 
-        for(i in 1 until 8){
-            if(time.dayOfWeek.value == i){
+        for (i in 1 until 8) {
+            if (time.dayOfWeek.value == i) {
                 sunday = time.minusDays((i % 7).toLong())     //이번주차의 시작인 일요일 날짜
 
                 //이번주차의 끝인 토요일 날짜
@@ -116,7 +124,10 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
 
         val tableRow = TableRow(context).apply {
             layoutParams =
-                TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT)
+                TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT
+                )
         }
 
         val textViewLP = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
@@ -150,12 +161,14 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 textViewLP.setMargins(2, 2, 2, 2)
                 layoutParams = textViewLP
                 setPadding(10, 2, 10, 2)
-                gravity = Gravity.TOP or Gravity.START
+                gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
 
-                text = if (date in sunday..saturday) {
-                    date.dayOfMonth.toString()
-                } else ""
+                text = if (date in sunday..saturday) date.dayOfMonth.toString() else ""
+
                 indexArray[i] = date.dayOfMonth
+                if (i == 0) setTextColor(Color.RED)
+                else if (i == 6) setTextColor(Color.BLUE)
+                else setTextColor(Color.BLACK)
 
                 textSize = 10F
 
@@ -216,8 +229,6 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
             }
             binding.tableWeekly.addView(tableRow)
         }
-
-
     }
 
     private fun createWeeklyHeader(): TableRow {
@@ -240,6 +251,9 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
                 text = ch.toString()
+                if (ch == '토') setTextColor(Color.BLUE)
+                else if (ch == '일') setTextColor(Color.RED)
+                else setTextColor(Color.BLACK)
                 textSize = 20F
             }
 
@@ -262,8 +276,22 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 val ym = YearMonth.of(time.year, time.monthValue).plusMonths(1)
                 LocalDate.of(ym.year, ym.monthValue, date)
             }
-
-            binding.textviewWeeklyTitle.text = time.format(DateTimeFormatter.ofPattern("yyyy년 M월"))
+//        년 월 출력방식 변경 (형식 : 월 영문표기 / 년)
+            val montharr = arrayOf<String>(
+                "JAN",
+                "FEB",
+                "MAR",
+                "APR",
+                "MAY",
+                "JUN",
+                "JUL",
+                "AUG",
+                "SEP",
+                "OCT",
+                "NOV",
+                "DEC"
+            )
+            binding.textviewWeeklyTitle.text = "${montharr[time.monthValue - 1]} / ${time.year} "
 
             cursor.foreground = null
             textView.foreground = ResourcesCompat.getDrawable(resources, R.drawable.cursor, null)

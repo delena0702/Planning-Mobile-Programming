@@ -17,7 +17,11 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
-    var time = LocalDate.now()!!
+    var time = (context as MainActivity).time
+        set(value) {
+            (context as MainActivity).time = value
+            field = value
+        }
     private lateinit var cursor: TextView
     val binding by lazy { ViewPlanningCalendarBinding.bind(this) }
     var dateSelectedListener: OnDateSelectedListener? = null
@@ -58,7 +62,9 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
     }
 
     fun createCalendar() {
-        binding.textviewCalendarTitle.text = time.format(DateTimeFormatter.ofPattern("y년 M월"))
+        //        년 월 출력방식 변경 (형식 : 월 영문표기 / 년)
+        val montharr = arrayOf<String>("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC")
+        binding.textviewCalendarTitle.text = "${montharr[time.monthValue-1]} / ${time.year} "
 
         binding.tableCalendar.removeAllViews()
         binding.tableCalendar.addView(createCalendarHeader())
@@ -84,6 +90,11 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
                     foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
                     text = if (date in 1..lastDate) date.toString() else ""
+//                    일자 : 토요일 -> 파란색, 일요일 -> 빨간색, 나머지 -> 검정색
+                    if(i == 0) setTextColor(Color.RED)
+                    else if(i == 6) setTextColor(Color.BLUE)
+                    else setTextColor(Color.BLACK)
+
                     textSize = 16F
 
                     setOnClickListener {
@@ -103,11 +114,9 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
 
                 date++
             }
-
             binding.tableCalendar.addView(tableRow)
             weekCount++
         }
-
         refreshSchedulePanel(weekCount)
     }
 
@@ -126,12 +135,16 @@ class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayo
             val textView = TextView(context).apply {
                 layoutParams = textViewLP
                 setPadding(0, 10, 0, 10)
-                gravity = Gravity.CENTER
+//                gravity = Gravity.CENTER
 
                 setBackgroundColor(Color.parseColor("#DDDDDD"))
                 foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
-
+                gravity = Gravity.CENTER
                 text = ch.toString()
+//              토 -> 파란색, 일 -> 빨간색, 나머지 -> 검은색
+                if(ch == '토') setTextColor(Color.BLUE)
+                else if(ch == '일') setTextColor(Color.RED)
+                else setTextColor(Color.BLACK)
                 textSize = 20F
             }
 

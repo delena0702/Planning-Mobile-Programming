@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.text.Html
 import com.examples.teamproject.databinding.ActivityMainBinding
 import com.examples.teamproject.yujin.WeeklyScheduleFragment
+import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    var time = LocalDate.now()
     var DBHelper: ScheduleDBHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,13 +27,15 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             buttonMonthCalendar.setOnClickListener {
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragmentContainerView, CalendarFragment())
+                val fragment = CalendarFragment()
+                transaction.replace(R.id.fragmentContainerView, fragment)
                 transaction.commit()
             }
 
             buttonWeekCalendar.setOnClickListener {
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragmentContainerView, WeeklyScheduleFragment())
+                val fragment = WeeklyScheduleFragment()
+                transaction.replace(R.id.fragmentContainerView, fragment)
                 transaction.commit()
             }
 
