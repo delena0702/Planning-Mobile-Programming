@@ -1,29 +1,27 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
-import com.examples.teamproject.databinding.ViewPlanningCalendarBinding
-import com.examples.teamproject.databinding.ViewPlanningCompareCalendarBinding
+import com.teamproject.planning.databinding.ViewPlanningCalendarBinding
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 
-class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
-    LinearLayout(context, attrs) {
-    var time = LocalDate.now()!!
+class PlanningCalendarView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+    var time = (context as MainActivity).time
+        set(value) {
+            (context as MainActivity).time = value
+            field = value
+        }
     private lateinit var cursor: TextView
-    val binding by lazy { ViewPlanningCompareCalendarBinding.bind(this) }
+    val binding by lazy { ViewPlanningCalendarBinding.bind(this) }
     var dateSelectedListener: OnDateSelectedListener? = null
-    private var textViews = ArrayList<TextView>()
 
     interface OnDateSelectedListener {
         fun onDateSelected(date: LocalDate)
@@ -33,9 +31,13 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
         const val HEADER_HEIGHT = 100
     }
 
-    fun initLayout() {
+    init {
+        initLayout()
+    }
+
+    private fun initLayout() {
         val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.view_planning_compare_calendar, this)
+        inflater.inflate(R.layout.view_planning_calendar, this)
 
         binding.textviewCalendarTitle.setOnClickListener {
             DatePickerDialog(this.context, { _, y, m, d ->
@@ -58,10 +60,21 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
 
     fun createCalendar() {
         //        년 월 출력방식 변경 (형식 : 월 영문표기 / 년)
-        val montharr = arrayOf<String>("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC")
-        binding.textviewCalendarTitle.text = "${montharr[time.monthValue-1]} / ${time.year} "
-
-        textViews.clear()
+        val montharr = arrayOf<String>(
+            "JAN",
+            "FEB",
+            "MAR",
+            "APR",
+            "MAY",
+            "JUN",
+            "JUL",
+            "AUG",
+            "SEP",
+            "OCT",
+            "NOV",
+            "DEC"
+        )
+        binding.textviewCalendarTitle.text = "${montharr[time.monthValue - 1]} / ${time.year} "
 
         binding.tableCalendar.removeAllViews()
         binding.tableCalendar.addView(createCalendarHeader())
@@ -86,13 +99,10 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
 
                     foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
-                    if (date in 1..lastDate)
-                        textViews.add(this)
-
                     text = if (date in 1..lastDate) date.toString() else ""
 //                    일자 : 토요일 -> 파란색, 일요일 -> 빨간색, 나머지 -> 검정색
-                    if(i == 0) setTextColor(Color.RED)
-                    else if(i == 6) setTextColor(Color.BLUE)
+                    if (i == 0) setTextColor(Color.RED)
+                    else if (i == 6) setTextColor(Color.BLUE)
                     else setTextColor(Color.BLACK)
 
                     textSize = 16F
@@ -114,11 +124,9 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
 
                 date++
             }
-
             binding.tableCalendar.addView(tableRow)
             weekCount++
         }
-
         refreshSchedulePanel(weekCount)
     }
 
@@ -137,17 +145,16 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
             val textView = TextView(context).apply {
                 layoutParams = textViewLP
                 setPadding(0, 10, 0, 10)
-                gravity = Gravity.CENTER
+//                gravity = Gravity.CENTER
 
                 setBackgroundColor(Color.parseColor("#DDDDDD"))
                 foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
-
+                gravity = Gravity.CENTER
                 text = ch.toString()
-//                토 -> 파란색, 일 -> 빨간색, 나머지 -> 검은색
-                if(ch == '토') setTextColor(Color.BLUE)
-                else if(ch == '일') setTextColor(Color.RED)
+//              토 -> 파란색, 일 -> 빨간색, 나머지 -> 검은색
+                if (ch == '토') setTextColor(Color.BLUE)
+                else if (ch == '일') setTextColor(Color.RED)
                 else setTextColor(Color.BLACK)
-
                 textSize = 20F
             }
 
@@ -168,22 +175,8 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
     }
 
     private fun refreshSchedulePanel(weekCount: Int) {
-        binding.calendarCompareSchedulePanel.weekCount = weekCount
-        binding.calendarCompareSchedulePanel.ym = YearMonth.of(time.year, time.month)
-        binding.calendarCompareSchedulePanel.refreshData()
-    }
-
-    fun refreshColor(arr: Array<Boolean>) {
-        for (i in 1 until arr.size) {
-            if (arr[i])
-                textViews[i - 1].setBackgroundColor(
-                    resources.getColor(
-                        R.color.empty_schedule,
-                        null
-                    )
-                )
-            else
-                textViews[i - 1].background = null
-        }
+        binding.calendarSchedulePanel.weekCount = weekCount
+        binding.calendarSchedulePanel.ym = YearMonth.of(time.year, time.month)
+        binding.calendarSchedulePanel.refreshData()
     }
 }

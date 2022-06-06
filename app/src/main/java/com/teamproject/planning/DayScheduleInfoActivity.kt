@@ -1,4 +1,4 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.examples.teamproject.databinding.ActivityDayScheduleInfoBinding
-import com.examples.teamproject.databinding.RowDayScheduleBinding
+import com.teamproject.planning.databinding.ActivityDayScheduleInfoBinding
+import com.teamproject.planning.databinding.RowDayScheduleBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

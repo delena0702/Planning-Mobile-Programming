@@ -1,4 +1,4 @@
-package com.examples.teamproject.yujin
+package com.teamproject.planning.yujin
 
 import android.content.Context
 import android.graphics.Color
@@ -8,10 +8,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
-import com.examples.teamproject.MainActivity
-import com.examples.teamproject.R
-import com.examples.teamproject.Schedule
-import com.examples.teamproject.databinding.ViewPlanningWeeklyBinding
+import com.teamproject.planning.MainActivity
+import com.teamproject.planning.R
+import com.teamproject.planning.Schedule
+import com.teamproject.planning.databinding.ViewPlanningWeeklyBinding
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.math.abs
@@ -78,6 +78,7 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 val textView = TextView(context).apply {
                     layoutParams = textViewLP
                     setPadding(10, 20, 10, 20)
+                    foreground = ResourcesCompat.getDrawable(resources, R.drawable.timetable_border, null)
                     gravity = Gravity.TOP or Gravity.START
                 }
                 tableRow.addView(textView)

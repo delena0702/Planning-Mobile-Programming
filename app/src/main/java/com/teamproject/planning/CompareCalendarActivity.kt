@@ -1,12 +1,11 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import android.content.Intent
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.examples.teamproject.databinding.ActivityCompareCalendarBinding
+import com.teamproject.planning.databinding.ActivityCompareCalendarBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +49,8 @@ class CompareCalendarActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         if (doc.select("state").text() == "0") {
-                            Toast.makeText(applicationContext, "유효하지 않은 코드입니다.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "유효하지 않은 코드입니다.", Toast.LENGTH_SHORT)
+                                .show()
                             finish()
                             return@withContext
                         }
@@ -64,30 +64,34 @@ class CompareCalendarActivity : AppCompatActivity() {
                     }
                 }
             }
-            
-            this.planningCompareCalendar.dateSelectedListener = object:PlanningCompareCalendarView.OnDateSelectedListener {
-                override fun onDateSelected(date: LocalDate) {
-                    val arr = ArrayList<Schedule>()
 
-                    for (sch in schedules) {
-                        if (sch.endTime.toLocalDate().isBefore(date))
-                            continue
-                        if (sch.startTime.toLocalDate().isAfter(date))
-                            continue
-                        arr.add(sch)
+            this.planningCompareCalendar.dateSelectedListener =
+                object : PlanningCompareCalendarView.OnDateSelectedListener {
+                    override fun onDateSelected(date: LocalDate) {
+                        val arr = ArrayList<Schedule>()
+
+                        for (sch in schedules) {
+                            if (sch.endTime.toLocalDate().isBefore(date))
+                                continue
+                            if (sch.startTime.toLocalDate().isAfter(date))
+                                continue
+                            arr.add(sch)
+                        }
+
+                        val str = Schedule.toJSONString(arr, true)
+                        val intent = Intent(
+                            this@CompareCalendarActivity,
+                            DayScheduleInfoActivity::class.java
+                        )
+                        intent.putExtra("schedules", str)
+                        intent.putExtra("time", date.toString())
+                        startActivity(intent)
                     }
-
-                    val str = Schedule.toJSONString(arr, true)
-                    val intent = Intent(this@CompareCalendarActivity, DayScheduleInfoActivity::class.java)
-                    intent.putExtra("schedules", str)
-                    intent.putExtra("time", date.toString())
-                    startActivity(intent)
                 }
-            }
         }
     }
 
-    private fun appendOtherSchedule(otherSchedule : ArrayList<Schedule>) {
+    private fun appendOtherSchedule(otherSchedule: ArrayList<Schedule>) {
         personCount++
 
         for (sch in otherSchedule)

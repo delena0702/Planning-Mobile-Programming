@@ -1,4 +1,4 @@
-package com.examples.teamproject.yujin
+package com.teamproject.planning.yujin
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.examples.teamproject.DayScheduleInfoActivity
-import com.examples.teamproject.EditScheduleInfoActivity
-import com.examples.teamproject.databinding.FragmentWeeklyScheduleBinding
+import com.teamproject.planning.DayScheduleInfoActivity
+import com.teamproject.planning.EditScheduleInfoActivity
+import com.teamproject.planning.databinding.FragmentWeeklyScheduleBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -25,22 +25,24 @@ class WeeklyScheduleFragment : Fragment() {
         //binding.planningWeekly.weeklyData = llooaadd()
 
         //주간 캘린더의 날짜(커서) 누르면 해당 날짜 일정 정보 띄우기
-        binding.planningWeekly.dateSelectedListener = object:
+        binding.planningWeekly.dateSelectedListener = object :
             PlanningWeeklyView.OnDateSelectedListener {
             override fun onDateSelected(date: LocalDate) {
-                val intent = Intent(this@WeeklyScheduleFragment.context, DayScheduleInfoActivity::class.java)
+                val intent =
+                    Intent(this@WeeklyScheduleFragment.context, DayScheduleInfoActivity::class.java)
                 val t = binding.planningWeekly.time
-                intent.putExtra("time",t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                intent.putExtra("time", t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 startActivity(intent)
             }
         }
 
 
         //타임테이블 클릭 시 해당 열 날짜의 일정 정보 띄우기
-        binding.planningWeekly.binding.tableSchedulePanel.touchEventListener = object:
+        binding.planningWeekly.binding.tableSchedulePanel.touchEventListener = object :
             TableSchedulePanel.OnTouchEventListener {
             override fun onTouch(date: LocalDate) {
-                val intent = Intent(this@WeeklyScheduleFragment.context, DayScheduleInfoActivity::class.java)
+                val intent =
+                    Intent(this@WeeklyScheduleFragment.context, DayScheduleInfoActivity::class.java)
                 val t = binding.planningWeekly.binding.tableSchedulePanel.pointDate
                 intent.putExtra("time", t!!.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 startActivity(intent)
@@ -57,7 +59,7 @@ class WeeklyScheduleFragment : Fragment() {
         return binding.root
     }
 
-    override fun onResume(){
+    override fun onResume() {
         binding.planningWeekly.refreshData()
         super.onResume()
     }

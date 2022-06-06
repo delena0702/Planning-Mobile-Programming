@@ -1,19 +1,17 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.examples.teamproject.databinding.ActivityCompareShareBinding
+import com.teamproject.planning.databinding.ActivityCompareShareBinding
 import kotlinx.coroutines.*
-import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 
 class CompareShareActivity : AppCompatActivity() {
     val binding by lazy { ActivityCompareShareBinding.inflate(layoutInflater) }
     val scope = CoroutineScope(Dispatchers.IO)
-    private var DBHelper:ScheduleDBHelper? = null
+    private var DBHelper: ScheduleDBHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

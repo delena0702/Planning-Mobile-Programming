@@ -1,10 +1,9 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Html
-import com.examples.teamproject.databinding.ActivityMainBinding
-import com.examples.teamproject.yujin.WeeklyScheduleFragment
+import com.teamproject.planning.databinding.ActivityMainBinding
+import com.teamproject.planning.yujin.WeeklyScheduleFragment
 import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {

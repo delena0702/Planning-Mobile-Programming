@@ -1,4 +1,4 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import org.json.JSONArray
 import org.json.JSONObject
@@ -54,7 +54,7 @@ class Schedule(
             return resultArray
         }
 
-        fun toJSONString(arr: ArrayList<Schedule>, mode:Boolean = false): String {
+        fun toJSONString(arr: ArrayList<Schedule>, mode: Boolean = false): String {
             val resultArray = JSONArray()
 
             for (schedule in arr) {
@@ -78,9 +78,7 @@ class Schedule(
                     obj.put("isHistory", schedule.isHistory)
                     obj.put("histGrade", schedule.histGrade)
                     obj.put("histMemo", schedule.histMemo)
-                }
-
-                else {
+                } else {
                     // 비공개
                     obj.put("title", "비공개")
                     obj.put("content", "비공개")

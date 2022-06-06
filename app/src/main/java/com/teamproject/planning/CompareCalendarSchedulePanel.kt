@@ -1,16 +1,15 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.text.TextUtils
 import android.util.AttributeSet
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 
-class CalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
+class CompareCalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
     androidx.appcompat.widget.AppCompatTextView(context, attrs) {
     private val dataCount = 3
     private val mainOffset = PlanningCalendarView.HEADER_HEIGHT
@@ -75,7 +74,7 @@ class CalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
     }
 
     fun refreshData() {
-        val data = (context as MainActivity).DBHelper!!.load()
+        val data = (context as CompareCalendarActivity).schedules
         data.sortWith { a, b ->
             if (a.startTime.compareTo(b.startTime) != 0)
                 return@sortWith a.startTime.compareTo(b.startTime)
@@ -103,16 +102,46 @@ class CalendarSchedulePanel(context: Context, attrs: AttributeSet?) :
             if (e > lastDate) e = lastDate
 
             // 비어있는 행에 스케쥴 배치 // 실패할 경우 출력하지 않음
+            var colorCheck = 0
             for (i in 0 until dataCount) {
+                if (i == dataCount - 1 && colorCheck == schedule.color)
+                    break
+
                 if (drawData!![s + offset][i] == null) {
                     for (j in s..e)
                         drawData!![j + offset][i] = schedule
+                    colorCheck = -1
+                    break
+                } else {
+                    colorCheck =
+                        if (colorCheck == 0 || colorCheck == drawData!![s + offset][i]!!.color)
+                            drawData!![s + offset][i]!!.color
+                        else
+                            -1
+                }
+            }
+        }
+
+        refreshColor()
+
+        // 바뀐 데이터로 출력
+        invalidate()
+    }
+
+    private fun refreshColor() {
+        val lastDate = ym.atEndOfMonth().dayOfMonth
+        val arr = Array(lastDate + 1) { true }
+        val offset = LocalDate.of(ym.year, ym.monthValue, 1).dayOfWeek.value % 7
+
+        for (i in 1..lastDate) {
+            for (j in 0 until dataCount) {
+                if (drawData!![i + offset][j] != null) {
+                    arr[i] = false
                     break
                 }
             }
         }
 
-        // 바뀐 데이터로 출력
-        invalidate()
+        (context as CompareCalendarActivity).binding.planningCompareCalendar.refreshColor(arr)
     }
 }

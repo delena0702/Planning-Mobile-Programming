@@ -1,22 +1,21 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import com.examples.teamproject.databinding.ActivityEditScheduleInfoBinding
+import com.teamproject.planning.databinding.ActivityEditScheduleInfoBinding
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class EditScheduleInfoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityEditScheduleInfoBinding.inflate(layoutInflater) }
-    private var DBHelper:ScheduleDBHelper? = null
+    private var DBHelper: ScheduleDBHelper? = null
 
     private var originalSchedule: Schedule? = null
     private var startTime = LocalDateTime.now()

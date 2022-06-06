@@ -1,4 +1,4 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
-import com.examples.teamproject.databinding.ActivityScheduleInfoBinding
+import com.teamproject.planning.databinding.ActivityScheduleInfoBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class ScheduleInfoActivity : AppCompatActivity() {
     private val binding by lazy { ActivityScheduleInfoBinding.inflate(layoutInflater) }
-    private var DBHelper:ScheduleDBHelper? = null
+    private var DBHelper: ScheduleDBHelper? = null
 
     private lateinit var schedule: Schedule
     private val activityLauncher =
@@ -29,7 +29,7 @@ class ScheduleInfoActivity : AppCompatActivity() {
 
         schedule = intent.getSerializableExtra("schedule") as Schedule
 
-        if (intent.getBooleanExtra("isCompare",false)) {
+        if (intent.getBooleanExtra("isCompare", false)) {
             binding.buttonDelete.visibility = View.GONE
             binding.buttonEdit.visibility = View.GONE
         }

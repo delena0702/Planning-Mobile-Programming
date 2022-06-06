@@ -6,12 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".CalendarFragment">
 
-    <com.examples.teamproject.PlanningCalendarView
+    <com.teamproject.planning.PlanningCalendarView
         android:id="@+id/planning_calendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.examples.teamproject.PlanningCalendarView>
+    </com.teamproject.planning.PlanningCalendarView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button_add"

@@ -57,7 +57,7 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <com.examples.teamproject.PlanningCompareCalendarView
+        <com.teamproject.planning.PlanningCompareCalendarView
             android:id="@+id/planning_compare_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -7,14 +7,14 @@
     tools:context=".yujin.WeeklyScheduleFragment">
 
 
-    <com.examples.teamproject.yujin.PlanningWeeklyView
+    <com.teamproject.planning.yujin.PlanningWeeklyView
         android:id="@+id/planning_weekly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </com.examples.teamproject.yujin.PlanningWeeklyView>
+    </com.teamproject.planning.yujin.PlanningWeeklyView>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

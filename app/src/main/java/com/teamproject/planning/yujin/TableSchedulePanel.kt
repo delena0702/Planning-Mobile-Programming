@@ -1,4 +1,4 @@
-package com.examples.teamproject.yujin
+package com.teamproject.planning.yujin
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,32 +6,29 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
 import androidx.core.content.res.ResourcesCompat
-import com.examples.teamproject.MainActivity
-import com.examples.teamproject.R
-import com.examples.teamproject.Schedule
+import com.teamproject.planning.MainActivity
+import com.teamproject.planning.R
+import com.teamproject.planning.Schedule
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 
-class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
+class TableSchedulePanel(context: Context, attrs: AttributeSet?) :
     androidx.appcompat.widget.AppCompatTextView(context, attrs) {
     private val dataCount = 49
     private var drawData: ArrayList<Schedule>? = null
     private val paint = Paint()
-    var sunday= LocalDate.now()!!
-    var saturday= LocalDate.now()!!
+    var sunday = LocalDate.now()!!
+    var saturday = LocalDate.now()!!
     var point: PointF? = null   //touch 시 point
     var w = 0.0f
     var h = 0.0f
-    var pointDate : LocalDate? = null
+    var pointDate: LocalDate? = null
     var touchEventListener: OnTouchEventListener? = null
 
     interface OnTouchEventListener {
-        fun onTouch(date:LocalDate)
+        fun onTouch(date: LocalDate)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -40,16 +37,17 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
             return
         }
 
-        w = width.toFloat()/7   //timetable 한 칸 가로
-        h = height.toFloat()/dataCount  //timetable 한 칸 세로
+        w = width.toFloat() / 7   //timetable 한 칸 가로
+        h = height.toFloat() / dataCount  //timetable 한 칸 세로
 
-        if(drawData?.size != 0) {
+        if (drawData?.size != 0) {
             for (i in 0 until drawData!!.size) {
                 var start = drawData!![i].startTime //drawData에 저장된 i번째 일정 시작 정보
                 var end = drawData!![i].endTime //drawData에 저장된 i번째 일정 끝 정보
 
                 if (start < sunday.atStartOfDay()) start = sunday.atStartOfDay()
-                if (end > saturday.plusDays(1L).atStartOfDay()) end = saturday.plusDays(1L).atStartOfDay()
+                if (end > saturday.plusDays(1L).atStartOfDay()) end =
+                    saturday.plusDays(1L).atStartOfDay()
 
                 if (end.toLocalDate() < sunday || saturday < start.toLocalDate()) continue
 
@@ -110,15 +108,15 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
-        if(event!!.action == ACTION_UP){
+        if (event!!.action == ACTION_UP) {
             point = PointF(event.x, event.y)
             //point 날짜 구하기
-            for(i in 0..6){
-                if(point!!.x >= w * i && point!!.x <= w * (i+1) ){
+            for (i in 0..6) {
+                if (point!!.x >= w * i && point!!.x <= w * (i + 1)) {
                     pointDate = sunday.plusDays(i.toLong())
                 }
             }
-        }else{
+        } else {
             return true
         }
 
@@ -133,9 +131,9 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
 
         drawData = ArrayList(data.size)
 
-        for(i in 1 until 8){
-            if(time.dayOfWeek.value == i){
-                if(i != 7)
+        for (i in 1 until 8) {
+            if (time.dayOfWeek.value == i) {
+                if (i != 7)
                     sunday = time.minusDays(i.toLong())     //이번주차의 시작인 일요일 날짜
                 else sunday = time
 
@@ -147,7 +145,7 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
         for (schedule in data)
             drawData!!.add(schedule)
 
-        drawData!!.sortWith { a, b->
+        drawData!!.sortWith { a, b ->
             if (a.startTime.compareTo(b.startTime) != 0)
                 return@sortWith a.startTime.compareTo(b.startTime)
             return@sortWith b.endTime.compareTo(a.endTime)

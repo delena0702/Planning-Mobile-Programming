@@ -1,4 +1,4 @@
-package com.examples.teamproject
+package com.teamproject.planning
 
 import org.junit.Test
 

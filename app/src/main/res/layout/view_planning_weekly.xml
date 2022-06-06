@@ -256,7 +256,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <com.examples.teamproject.yujin.TableSchedulePanel
+                <com.teamproject.planning.yujin.TableSchedulePanel
                     android:id="@+id/table_schedule_panel"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
