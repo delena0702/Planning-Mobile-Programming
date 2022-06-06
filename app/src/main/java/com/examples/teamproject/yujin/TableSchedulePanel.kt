@@ -14,6 +14,8 @@ import com.examples.teamproject.MainActivity
 import com.examples.teamproject.R
 import com.examples.teamproject.Schedule
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
     androidx.appcompat.widget.AppCompatTextView(context, attrs) {
@@ -46,46 +48,61 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
                 var start = drawData!![i].startTime //drawData에 저장된 i번째 일정 시작 정보
                 var end = drawData!![i].endTime //drawData에 저장된 i번째 일정 끝 정보
 
-                var startDateValue = start.dayOfWeek.value  // 일정 시작 요일 값
-                if (startDateValue == 7) startDateValue = 0     //일요일은 0으로
+                if (start < sunday.atStartOfDay()) start = sunday.atStartOfDay()
+                if (end > saturday.plusDays(1L).atStartOfDay()) end = saturday.plusDays(1L).atStartOfDay()
 
-                val startHour = start.hour    //시작 hour
-                val endHour = end.hour    //끝 hour
+                if (end.toLocalDate() < sunday || saturday < start.toLocalDate()) continue
 
-                val startHeight = 2 * startHour + start.minute.toFloat() / 30 + 1
-                val endHeight = 2 * endHour + end.minute.toFloat() / 30 + 1
+                val startDateValue = start.dayOfWeek.value % 7  // 일정 시작 요일 값
+                val endDateValue = end.dayOfWeek.value % 7
 
+                for (dateValue in startDateValue..endDateValue) {
+                    val d = sunday.plusDays(dateValue.toLong())
+                    val startHour = start.hour    //시작 hour
+                    val endHour = end.hour    //끝 hour
 
-                paint.color = when (drawData!![i].color) {
-                    1 ->ResourcesCompat.getColor(resources, R.color.schedule_color1, null)
-                    2 ->ResourcesCompat.getColor(resources, R.color.schedule_color2, null)
-                    3 ->ResourcesCompat.getColor(resources, R.color.schedule_color3, null)
-                    4 ->ResourcesCompat.getColor(resources, R.color.schedule_color4, null)
-                    5 ->ResourcesCompat.getColor(resources, R.color.schedule_color5, null)
-                    else ->ResourcesCompat.getColor(resources, R.color.schedule_color1, null)
-                }
-                paint.style = Paint.Style.FILL
-                paint.textSize =  h / 2.5.toFloat()
+                    var startHeight = 2 * startHour + start.minute.toFloat() / 30 + 1
+                    var endHeight = 2 * endHour + end.minute.toFloat() / 30 + 1
 
-                //Log.d("drawData[$i]","${drawData!![i]}")
-                if (start.toLocalDate() in sunday..saturday && start.toLocalDate()==end.toLocalDate()) {
+                    if (d != start.toLocalDate()) startHeight = 1F
+                    if (d != end.toLocalDate()) endHeight = 2 * 24 + 1F
+
+                    paint.color = when (drawData!![i].color) {
+                        1 -> ResourcesCompat.getColor(resources, R.color.schedule_color1, null)
+                        2 -> ResourcesCompat.getColor(resources, R.color.schedule_color2, null)
+                        3 -> ResourcesCompat.getColor(resources, R.color.schedule_color3, null)
+                        4 -> ResourcesCompat.getColor(resources, R.color.schedule_color4, null)
+                        5 -> ResourcesCompat.getColor(resources, R.color.schedule_color5, null)
+                        else -> ResourcesCompat.getColor(resources, R.color.schedule_color1, null)
+                    }
+                    paint.style = Paint.Style.FILL
+                    paint.textSize = h / 3.toFloat()
+
+                    //Log.d("drawData[$i]","${drawData!![i]}")
                     canvas!!.drawRect(
-                        startDateValue * w,
+                        dateValue * w,
                         startHeight * h - 2,
-                        (startDateValue + 1) * w - 10,
+                        (dateValue + 1) * w - 1,
                         endHeight * h - 2,
                         paint
                     )
                     paint.color = Color.parseColor("#000000")
 
+                    var title = drawData!![i].title
+
+                    if (paint.measureText(title) >= w) {
+                        title = "${drawData!![i].title}..."
+                        while (paint.measureText(title) >= w - 10)
+                            title = "${title.substring(0, title.length - 4)}..."
+                    }
+
                     canvas.drawText(
-                        drawData!![i].title,
-                        (startDateValue) * w + 10,
+                        title,
+                        (dateValue) * w + 10,
                         startHeight * h + 45,
                         paint
                     )
                 }
-
             }
         }
         super.onDraw(canvas)
@@ -116,18 +133,24 @@ class TableSchedulePanel (context: Context, attrs: AttributeSet?) :
 
         drawData = ArrayList(data.size)
 
-        for(i in 0 until 7){
+        for(i in 1 until 8){
             if(time.dayOfWeek.value == i){
-                //이번주차의 시작인 일요일 날짜
-                sunday = LocalDate.of(time.year, time.monthValue, time.dayOfMonth).minusDays(i.toLong())
+                if(i != 7)
+                    sunday = time.minusDays(i.toLong())     //이번주차의 시작인 일요일 날짜
+                else sunday = time
 
                 //이번주차의 끝인 토요일 날짜
                 saturday = sunday.plusDays(6)
             }
         }
 
-        for (schedule in data){
+        for (schedule in data)
             drawData!!.add(schedule)
+
+        drawData!!.sortWith { a, b->
+            if (a.startTime.compareTo(b.startTime) != 0)
+                return@sortWith a.startTime.compareTo(b.startTime)
+            return@sortWith b.endTime.compareTo(a.endTime)
         }
 
         // 바뀐 데이터로 출력

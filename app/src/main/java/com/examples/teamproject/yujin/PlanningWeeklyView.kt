@@ -84,7 +84,8 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                     setPadding(10, 20, 10, 20)
                     gravity = Gravity.TOP or Gravity.START
 
-                    foreground = ResourcesCompat.getDrawable(resources, R.drawable.timetable_border, null)
+                    foreground =
+                        ResourcesCompat.getDrawable(resources, R.drawable.timetable_border, null)
                 }
                 tableRow.addView(textView)
             }
@@ -99,35 +100,48 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
         binding.tableWeekly.removeAllViews()
         binding.tableWeekly.addView(createWeeklyHeader())
 
-        val lastDate = YearMonth.of(time.year, time.monthValue).atEndOfMonth().dayOfMonth
-
-        //time(현재 커서 위치)의 전 달의 마지막 날 ex. 28,30,31
-        val preMonthLastdate =
-            YearMonth.of(time.year, time.monthValue - 1).atEndOfMonth().dayOfMonth
-
         var sunday = time
         var saturday = time
 
-        for (i in 0 until 7) {
-            if (time.dayOfWeek.value == i) {
-                //이번주차의 시작인 일요일 날짜
-                sunday = time.minusDays(i.toLong())
+        for(i in 1 until 8){
+            if(time.dayOfWeek.value == i){
+                sunday = time.minusDays((i % 7).toLong())     //이번주차의 시작인 일요일 날짜
 
                 //이번주차의 끝인 토요일 날짜
                 saturday = sunday.plusDays(6)
             }
         }
+
         var date = sunday
 
         val tableRow = TableRow(context).apply {
             layoutParams =
-                TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 0, 1F)
+                TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT)
         }
 
-        val textViewLP = TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1F)
+        val textViewLP = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
+
+        // val result = ArrayList<Schedule>()
+        val weeklyDataGroup = HashMap<Int, ArrayList<Schedule>>()
 
         weeklyData.sortBy { it.startTime }
-        val weeklyDataGroup = weeklyData.groupBy { it.startTime.dayOfMonth }
+
+        for (sch in weeklyData) {
+            if (sch.endTime.toLocalDate() < sunday) continue
+            if (sch.startTime.toLocalDate() > saturday) continue
+
+            var d = sch.startTime
+            while (d <= sch.endTime) {
+                if (!weeklyDataGroup.contains(d.dayOfMonth))
+                    weeklyDataGroup.put(d.dayOfMonth, ArrayList())
+
+                weeklyDataGroup.get(d.dayOfMonth)!!.add(sch)
+                d = d.plusDays(1L)
+            }
+        }
+
+        // val weeklyDataGroup = result.groupBy { it.startTime.dayOfMonth }
+
         val indexArray = IntArray(7)
         val depthArray = IntArray(7)
 
@@ -137,8 +151,6 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 layoutParams = textViewLP
                 setPadding(10, 2, 10, 2)
                 gravity = Gravity.TOP or Gravity.START
-
-                foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
                 text = if (date in sunday..saturday) {
                     date.dayOfMonth.toString()
@@ -156,7 +168,8 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
 
             //현재 날짜 위치 커서
             if (date == time) {
-                textView.foreground = ResourcesCompat.getDrawable(resources, R.drawable.cursor, null)
+                textView.foreground =
+                    ResourcesCompat.getDrawable(resources, R.drawable.cursor, null)
                 cursor = textView
             }
 
@@ -168,11 +181,11 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
         //refresh
 //        binding.weeklySchedulePanel.ym = YearMonth.of(time.year, time.month)
         // binding.weeklySchedulePanel.refreshData()
-        val maxCount = weeklyDataGroup.values.maxOf { it.size }
+        val maxCount = weeklyDataGroup.values.maxOfOrNull { it.size } ?: return
         repeat(maxCount) { row ->
             val tableRow = TableRow(context).apply {
                 layoutParams =
-                    TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, 0, 1F)
+                    TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 0, 1F)
             }
             val textViewLP = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1F)
             for (i in 0 until 7) {
@@ -183,15 +196,15 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                     gravity = Gravity.TOP or Gravity.START
 
                     if (weeklyDataGroup.containsKey(indexArray[i])) {
-                        if (weeklyDataGroup[indexArray[i]]?.size!! > depthArray[i]){
+                        if (weeklyDataGroup[indexArray[i]]?.size!! > depthArray[i]) {
                             text = weeklyDataGroup[indexArray[i]]?.get(depthArray[i])?.title
                             when (weeklyDataGroup[indexArray[i]]?.get(depthArray[i])?.color) {
-                                1 ->setBackgroundResource(R.drawable.textview_background_radius1)
-                                2 ->setBackgroundResource(R.drawable.textview_background_radius2)
-                                3 ->setBackgroundResource(R.drawable.textview_background_radius3)
-                                4 ->setBackgroundResource(R.drawable.textview_background_radius4)
-                                5 ->setBackgroundResource(R.drawable.textview_background_radius5)
-                                else ->setBackgroundResource(R.drawable.textview_background_radius1)
+                                1 -> setBackgroundResource(R.drawable.textview_background_radius1)
+                                2 -> setBackgroundResource(R.drawable.textview_background_radius2)
+                                3 -> setBackgroundResource(R.drawable.textview_background_radius3)
+                                4 -> setBackgroundResource(R.drawable.textview_background_radius4)
+                                5 -> setBackgroundResource(R.drawable.textview_background_radius5)
+                                else -> setBackgroundResource(R.drawable.textview_background_radius1)
                             }
 
                             depthArray[i]++
@@ -252,7 +265,7 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
 
             binding.textviewWeeklyTitle.text = time.format(DateTimeFormatter.ofPattern("yyyy년 M월"))
 
-            cursor.foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
+            cursor.foreground = null
             textView.foreground = ResourcesCompat.getDrawable(resources, R.drawable.cursor, null)
             cursor = textView
         } else {
