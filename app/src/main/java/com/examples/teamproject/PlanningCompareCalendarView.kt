@@ -57,7 +57,9 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
     }
 
     fun createCalendar() {
-        binding.textviewCalendarTitle.text = time.format(DateTimeFormatter.ofPattern("y년 M월"))
+        //        년 월 출력방식 변경 (형식 : 월 영문표기 / 년)
+        val montharr = arrayOf<String>("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC")
+        binding.textviewCalendarTitle.text = "${montharr[time.monthValue-1]} / ${time.year} "
 
         textViews.clear()
 
@@ -88,6 +90,11 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
                         textViews.add(this)
 
                     text = if (date in 1..lastDate) date.toString() else ""
+//                    일자 : 토요일 -> 파란색, 일요일 -> 빨간색, 나머지 -> 검정색
+                    if(i == 0) setTextColor(Color.RED)
+                    else if(i == 6) setTextColor(Color.BLUE)
+                    else setTextColor(Color.BLACK)
+
                     textSize = 16F
 
                     setOnClickListener {
@@ -136,6 +143,11 @@ class PlanningCompareCalendarView(context: Context?, attrs: AttributeSet?) :
                 foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
                 text = ch.toString()
+//                토 -> 파란색, 일 -> 빨간색, 나머지 -> 검은색
+                if(ch == '토') setTextColor(Color.BLUE)
+                else if(ch == '일') setTextColor(Color.RED)
+                else setTextColor(Color.BLACK)
+
                 textSize = 20F
             }
 

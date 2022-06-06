@@ -11,16 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/button_weekly_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
             android:layout_margin="10dp"
-            app:srcCompat="@drawable/ic_baseline_arrow_circle_left_24" />
+            app:srcCompat="@drawable/left_arrow" />
 
         <TextView
             android:id="@+id/textview_weekly_title"
@@ -29,15 +29,17 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:text="5월"
             android:textSize="30sp" />
 
         <ImageView
             android:id="@+id/button_weekly_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
             android:layout_margin="10dp"
-            app:srcCompat="@drawable/ic_baseline_arrow_circle_right_24" />
+            app:srcCompat="@drawable/right_arrow" />
     </LinearLayout>
 
     <FrameLayout

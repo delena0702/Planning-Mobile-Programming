@@ -94,7 +94,9 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
     }
 
     fun createWeekly() {
-        binding.textviewWeeklyTitle.text = "${time.year}년 ${time.monthValue}월"
+//        년 월 출력방식 변경 (형식 : 월 영문표기 / 년)
+        val montharr = arrayOf<String>("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC")
+        binding.textviewWeeklyTitle.text = "${montharr[time.monthValue-1]} / ${time.year} "
 
         binding.tableWeekly.removeAllViews()
         binding.tableWeekly.addView(createWeeklyHeader())
@@ -108,10 +110,10 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
         var sunday = time
         var saturday = time
 
-        for (i in 0 until 7) {
-            if (time.dayOfWeek.value == i) {
-                //이번주차의 시작인 일요일 날짜
-                sunday = time.minusDays(i.toLong())
+        for(i in 1 until 8){
+            if(time.dayOfWeek.value == i){
+                if(i != 7)
+                    sunday = time.minusDays(i.toLong())     //이번주차의 시작인 일요일 날짜
 
                 //이번주차의 끝인 토요일 날짜
                 saturday = sunday.plusDays(6)
@@ -140,10 +142,11 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
 
                 foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
-                text = if (date in sunday..saturday) {
-                    date.dayOfMonth.toString()
-                } else ""
+                text = if (date in sunday..saturday) date.dayOfMonth.toString() else ""
                 indexArray[i] = date.dayOfMonth
+                if(i == 0) setTextColor(Color.RED)
+                else if(i == 6) setTextColor(Color.BLUE)
+                else setTextColor(Color.BLACK)
 
                 textSize = 10F
 
@@ -203,8 +206,6 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
             }
             binding.tableWeekly.addView(tableRow)
         }
-
-
     }
 
     private fun createWeeklyHeader(): TableRow {
@@ -227,6 +228,9 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
 
                 text = ch.toString()
+                if(ch == '토') setTextColor(Color.BLUE)
+                else if(ch == '일') setTextColor(Color.RED)
+                else setTextColor(Color.BLACK)
                 textSize = 20F
             }
 
@@ -249,8 +253,9 @@ class PlanningWeeklyView(context: Context?, attrs: AttributeSet?) : LinearLayout
                 val ym = YearMonth.of(time.year, time.monthValue).plusMonths(1)
                 LocalDate.of(ym.year, ym.monthValue, date)
             }
-
-            binding.textviewWeeklyTitle.text = time.format(DateTimeFormatter.ofPattern("yyyy년 M월"))
+//        년 월 출력방식 변경 (형식 : 월 영문표기 / 년)
+            val montharr = arrayOf<String>("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC")
+            binding.textviewWeeklyTitle.text = "${montharr[time.monthValue-1]} / ${time.year} "
 
             cursor.foreground = ResourcesCompat.getDrawable(resources, R.drawable.border, null)
             textView.foreground = ResourcesCompat.getDrawable(resources, R.drawable.cursor, null)

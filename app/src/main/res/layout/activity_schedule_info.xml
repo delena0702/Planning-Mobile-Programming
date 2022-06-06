@@ -23,13 +23,22 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="제목"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:textSize="25sp"/>
+
+                <TextView
                     android:id="@+id/textview_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_span="2"
                     android:layout_weight="1"
-                    android:text="제목"
+
                     android:textSize="25sp" />
             </TableRow>
 
@@ -39,13 +48,22 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="내용"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <TextView
                     android:id="@+id/textview_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_span="2"
                     android:layout_weight="1"
-                    android:text="내용"
+
                     android:textSize="20sp" />
             </TableRow>
 
@@ -55,11 +73,11 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="10dp"
                     android:contentDescription="@null"
-                    app:srcCompat="@drawable/ic_baseline_access_time_24" />
+                    app:srcCompat="@drawable/time_icon" />
 
                 <TextView
                     android:id="@+id/textview_time"
@@ -77,11 +95,11 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="10dp"
                     android:contentDescription="@null"
-                    app:srcCompat="@drawable/ic_baseline_place_24" />
+                    app:srcCompat="@drawable/place_icon" />
 
                 <TextView
                     android:id="@+id/textview_place"
@@ -99,11 +117,11 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="10dp"
                     android:contentDescription="@null"
-                    app:srcCompat="@drawable/ic_baseline_lock_24" />
+                    app:srcCompat="@drawable/lock_icon" />
 
                 <TextView
                     android:id="@+id/textview_open"
@@ -120,14 +138,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="색상"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/color_icon" />
 
                 <ImageView
                     android:id="@+id/imageview_color"
@@ -145,14 +161,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="평가"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/evaluate_icon" />
 
                 <ImageView
                     android:id="@+id/imageview_open"
@@ -171,11 +185,11 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="10dp"
                     android:contentDescription="@null"
-                    app:srcCompat="@drawable/ic_baseline_chat_24" />
+                    app:srcCompat="@drawable/memo_icon" />
 
                 <TextView
                     android:id="@+id/textview_memo"

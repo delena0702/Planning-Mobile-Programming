@@ -45,6 +45,35 @@
         <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/TeamProject/app/src/main/res/layout/row_day_schedule.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/TeamProject/app/src/main/res/layout/view_planning_calendar.xml" value="0.1" />
         <entry key="..\:/Users/Mr.Lee/AndroidStudioProjects/TeamProject/app/src/main/res/layout/view_planning_compare_calendar.xml" value="0.1" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.132" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/border.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_arrow_circle_left_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_arrow_circle_right_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_calendar_view_week_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_chat_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_circle_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_compare_arrows_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_lock_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_place_24.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_thumb_up_24.xml" value="0.132" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_baseline_thumbs_up_down_24.xml" value="0.132" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/ic_launcher_background.xml" value="0.132" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/textview_background_radius1.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/drawable/textview_background_radius3.xml" value="0.1295" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/activity_edit_schedule_info.xml" value="0.264" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/activity_schedule_info.xml" value="0.1" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/fragment_calendar.xml" value="0.25364583333333335" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/fragment_compare.xml" value="0.25364583333333335" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/fragment_weekly_schedule.xml" value="0.12335359675785208" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/row_day_schedule.xml" value="0.25364583333333335" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/view_planning_calendar.xml" value="0.25364583333333335" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/view_planning_compare_calendar.xml" value="0.25364583333333335" />
+        <entry key="..\:/git/Planning-Mobile-Programming/app/src/main/res/layout/view_planning_weekly.xml" value="0.25364583333333335" />
       </map>
     </option>
   </component>
